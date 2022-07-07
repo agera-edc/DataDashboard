@@ -13,7 +13,7 @@ import { ContractOffer } from './contractOffer';
 
 
 export interface Catalog { 
-    id?: string;
     contractOffers?: Array<ContractOffer>;
+    id?: string;
 }
 

@@ -13,8 +13,8 @@ import { Constraint } from './constraint';
 
 
 export interface Action { 
-    type?: string;
-    includedIn?: string;
     constraint?: Constraint;
+    includedIn?: string;
+    type?: string;
 }
 
