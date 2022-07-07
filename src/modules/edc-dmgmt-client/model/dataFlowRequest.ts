@@ -9,13 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DataAddress } from './dataAddress';
 
 
-export interface DataPlaneInstance { 
+export interface DataFlowRequest { 
+    destinationDataAddress?: DataAddress;
     id?: string;
-    lastActive?: number;
-    properties?: { [key: string]: object; };
-    turnCount?: number;
-    url?: string;
+    processId?: string;
+    properties?: { [key: string]: string; };
+    sourceDataAddress?: DataAddress;
+    traceContext?: { [key: string]: string; };
+    trackable?: boolean;
 }
 

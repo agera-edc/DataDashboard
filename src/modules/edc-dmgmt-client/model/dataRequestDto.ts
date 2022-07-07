@@ -13,7 +13,7 @@
 
 export interface DataRequestDto { 
     assetId?: string;
-    contractId?: string;
     connectorId?: string;
+    contractId?: string;
 }
 

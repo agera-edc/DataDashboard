@@ -9,8 +9,8 @@ import {
   CONNECTOR_CATALOG_API,
   ContractAgreementDto,
   ContractNegotiationDto,
-  ContractNegotiationService,
-  NegotiationInitiateRequestDto,
+  ContractNegotiationService, NegotiationId,
+  NegotiationInitiateRequestDto, TransferId,
   TransferProcessDto,
   TransferProcessService,
   TransferRequestDto
@@ -34,14 +34,14 @@ export class CatalogBrowserService {
 
   getContractOffers(): Observable<ContractOffer[]> {
     return this.post<ContractOffer[]>(this.catalogApiUrl)
-      .pipe(map((contractOffers) => contractOffers.map(contractOffer => {
+      .pipe(map((contractOffers: any[]) => contractOffers.map(contractOffer => {
         contractOffer.asset = new Asset(contractOffer.asset.properties)
         return contractOffer;
       })));
   }
 
   initiateTransfer(transferRequest: TransferRequestDto): Observable<string> {
-    return this.transferProcessService.initiateTransfer(transferRequest).pipe(map(t => t.id!))
+    return this.transferProcessService.initiateTransfer(transferRequest).pipe(map((t: TransferId) => t.id! as string))
   }
 
   getTransferProcessesById(id: string): Observable<TransferProcessDto> {
@@ -49,14 +49,14 @@ export class CatalogBrowserService {
   }
 
   initiateNegotiation(initiateDto: NegotiationInitiateRequestDto): Observable<string> {
-    return this.negotiationService.initiateContractNegotiation(initiateDto, 'body', false,).pipe(map(t => t.id!))
+    return this.negotiationService.initiateContractNegotiation(initiateDto, 'body', false,).pipe(map((t: NegotiationId) => t.id!))
   }
 
   getNegotiationState(id: string): Observable<ContractNegotiationDto> {
     return this.negotiationService.getNegotiation(id);
   }
 
-  getAgreementForNegotiation(contractId: string): Observable<ContractAgreementDto> {
+  getAgreementForNegotiation(contractId: string): Observable<ContractNegotiationDto> {
     return this.negotiationService.getAgreementForNegotiation(contractId);
   }
 

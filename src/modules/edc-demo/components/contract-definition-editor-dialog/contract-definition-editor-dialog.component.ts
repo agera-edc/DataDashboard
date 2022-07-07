@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {AssetService, ContractDefinitionDto, Policy, PolicyService} from "../../../edc-dmgmt-client";
+import {AssetService, ContractDefinitionDto, Policy, PolicyDefinition, PolicyService} from "../../../edc-dmgmt-client";
 import {map} from "rxjs/operators";
 import {Asset} from "../../models/asset";
 
@@ -12,12 +12,12 @@ import {Asset} from "../../models/asset";
 })
 export class ContractDefinitionEditorDialog implements OnInit {
 
-  policies: Policy[] = [];
+  policies: PolicyDefinition[] = [];
   availableAssets: Asset[] = [];
   name: string = '';
   editMode = false;
-  accessPolicy?: Policy;
-  contractPolicy?: Policy;
+  accessPolicy?: PolicyDefinition;
+  contractPolicy?: PolicyDefinition;
   assets: Asset[] = [];
   contractDefinition: ContractDefinitionDto = {
     id: '',
@@ -42,26 +42,26 @@ export class ContractDefinitionEditorDialog implements OnInit {
       this.accessPolicy = this.policies.find(policy => policy.uid === this.contractDefinition.accessPolicyId);
       this.contractPolicy = this.policies.find(policy => policy.uid === this.contractDefinition.contractPolicyId);
     });
-    this.assetService.getAllAssets().pipe(map(asset => asset.map(a => new Asset(a.properties)))).subscribe(assets => {
+    this.assetService.getAllAssets().pipe(map((asset: any[]) => asset.map(a => new Asset(a.properties)))).subscribe((assets: Asset[]) => {
       this.availableAssets = assets;
       // preselection
       if (this.contractDefinition) {
-        const assetIds = this.contractDefinition.criteria.map(c => c.right);
+        const assetIds = this.contractDefinition.criteria.map(c => c.right as unknown);
         this.assets = this.availableAssets.filter(asset => assetIds.includes(asset.id));
       }
     })
   }
 
   onSave() {
-    this.contractDefinition.accessPolicyId = this.accessPolicy!.uid;
-    this.contractDefinition.contractPolicyId = this.contractPolicy!.uid;
+    this.contractDefinition.accessPolicyId = this.accessPolicy!.uid as string;
+    this.contractDefinition.contractPolicyId = this.contractPolicy!.uid as string;
     this.contractDefinition.criteria = [];
 
     const ids= this.assets.map(asset => asset.id);
-
+    const assetPropId: unknown = 'asset:prop:id';
 
       this.contractDefinition.criteria = [...this.contractDefinition.criteria, {
-        left: 'asset:prop:id',
+        left: assetPropId as object,
         op: 'in',
         right: ids,
       }];

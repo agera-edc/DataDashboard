@@ -18,6 +18,8 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+// @ts-ignore
+import { HealthStatus } from '../model/healthStatus';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -49,6 +51,7 @@ export class ApplicationObservabilityService {
     }
 
 
+    // @ts-ignore
     private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
         if (typeof value === "object" && value instanceof Date === false) {
             httpParams = this.addToHttpParamsRecursive(httpParams, value);
@@ -85,12 +88,13 @@ export class ApplicationObservabilityService {
     }
 
     /**
+     * Performs a liveness probe to determine whether the runtime is working properly.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public checkHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public checkHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public checkHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public checkHealth(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<HealthStatus>>;
+    public checkHealth(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<HealthStatus>>>;
+    public checkHealth(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<HealthStatus>>>;
     public checkHealth(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -124,7 +128,7 @@ export class ApplicationObservabilityService {
             }
         }
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/check/health`,
+        return this.httpClient.get<Array<HealthStatus>>(`${this.configuration.basePath}/check/health`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -137,12 +141,13 @@ export class ApplicationObservabilityService {
     }
 
     /**
+     * Performs a liveness probe to determine whether the runtime is working properly.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getLiveness(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public getLiveness(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public getLiveness(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public getLiveness(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<HealthStatus>>;
+    public getLiveness(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<HealthStatus>>>;
+    public getLiveness(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<HealthStatus>>>;
     public getLiveness(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -176,7 +181,7 @@ export class ApplicationObservabilityService {
             }
         }
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/check/liveness`,
+        return this.httpClient.get<Array<HealthStatus>>(`${this.configuration.basePath}/check/liveness`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -189,12 +194,13 @@ export class ApplicationObservabilityService {
     }
 
     /**
+     * Performs a readiness probe to determine whether the runtime is able to accept requests.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getReadiness(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public getReadiness(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public getReadiness(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public getReadiness(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<HealthStatus>>;
+    public getReadiness(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<HealthStatus>>>;
+    public getReadiness(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<HealthStatus>>>;
     public getReadiness(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -228,7 +234,7 @@ export class ApplicationObservabilityService {
             }
         }
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/check/readiness`,
+        return this.httpClient.get<Array<HealthStatus>>(`${this.configuration.basePath}/check/readiness`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -241,12 +247,13 @@ export class ApplicationObservabilityService {
     }
 
     /**
+     * Performs a startup probe to determine whether the runtime has completed startup.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getStartup(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public getStartup(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public getStartup(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public getStartup(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<HealthStatus>>;
+    public getStartup(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<HealthStatus>>>;
+    public getStartup(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<HealthStatus>>>;
     public getStartup(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -280,7 +287,7 @@ export class ApplicationObservabilityService {
             }
         }
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/check/startup`,
+        return this.httpClient.get<Array<HealthStatus>>(`${this.configuration.basePath}/check/startup`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

@@ -34,9 +34,9 @@ export class AssetViewerComponent implements OnInit {
     this.filteredAssets$ = this.fetch$
       .pipe(
         switchMap(() => {
-          const assets$ = this.assetService.getAllAssets().pipe(map(assets => assets.map(asset => new Asset(asset.properties))));
+          const assets$ = this.assetService.getAllAssets().pipe(map((assets: any[]) => assets.map(asset => new Asset(asset.properties))));
           return !!this.searchText ?
-            assets$.pipe(map(assets => assets.filter(asset => asset.name.includes(this.searchText))))
+            assets$.pipe(map((assets: any[]) => assets.filter(asset => asset.name.includes(this.searchText))))
             :
             assets$;
         }));
@@ -55,10 +55,10 @@ export class AssetViewerComponent implements OnInit {
     const dialogData = ConfirmDialogModel.forDelete("asset", `"${asset.name}"`)
     const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: "20%", data: dialogData});
 
-    ref.afterClosed().subscribe(res => {
+    ref.afterClosed().subscribe((res: any) => {
       if (res) {
         this.assetService.removeAsset(asset.id).subscribe(() => this.fetch$.next(null),
-          err => this.showError(err),
+            (err: string) => this.showError(err),
           () => this.notificationService.showInfo("Successfully deleted")
         );
       }
@@ -71,7 +71,7 @@ export class AssetViewerComponent implements OnInit {
     dialogRef.afterClosed().pipe(first()).subscribe((result: { assetEntryDto?: AssetEntryDto }) => {
       const newAsset = result?.assetEntryDto;
       if (newAsset) {
-        this.assetService.createAsset(newAsset).subscribe(() => this.fetch$.next(null), error => this.showError(error), () => this.notificationService.showInfo("Successfully created"));
+        this.assetService.createAsset(newAsset).subscribe(() => this.fetch$.next(null), (error: string) => this.showError(error), () => this.notificationService.showInfo("Successfully created"));
       }
     });
   }

@@ -12,9 +12,9 @@
 
 
 export interface DeprovisionedResource { 
-    provisionedResourceId?: string;
-    inProcess?: boolean;
     error?: boolean;
     errorMessage?: string;
+    inProcess?: boolean;
+    provisionedResourceId?: string;
 }
 
