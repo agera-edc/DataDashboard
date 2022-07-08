@@ -63,7 +63,8 @@ export class CatalogBrowserComponent implements OnInit {
         assetId: contractOffer.asset.id,
         policy: contractOffer.policy,
       },
-      connectorId: 'yomama'
+      connectorId: 'yomama',
+      protocol: 'ids-multipart'
     };
 
     const finishedNegotiationStates = [
@@ -84,8 +85,8 @@ export class CatalogBrowserComponent implements OnInit {
           // const finishedNegotiations: NegotiationResult[] = [];
 
           for (const negotiation of this.runningNegotiations.values()) {
-            this.apiService.getNegotiationState(negotiation.id).subscribe(updatedNegotiation => {
-              if (finishedNegotiationStates.includes(updatedNegotiation.state)) {
+            this.apiService.getNegotiationState(negotiation.id).subscribe((updatedNegotiation: ContractNegotiationDto) => {
+              if (finishedNegotiationStates.includes(updatedNegotiation.state as string)) {
                 let offerId = negotiation.offerId;
                 this.runningNegotiations.delete(offerId);
                 if (updatedNegotiation.state === "CONFIRMED") {
@@ -104,7 +105,7 @@ export class CatalogBrowserComponent implements OnInit {
           }
         }, 1000);
       }
-    }, error => {
+    }, (error: any) => {
       console.error(error);
       this.notificationService.showError("Error starting negotiation");
     });
@@ -115,7 +116,7 @@ export class CatalogBrowserComponent implements OnInit {
   }
 
   getState(contractOffer: ContractOffer): string {
-    const transferProcess = this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.asset.id);
+    const transferProcess = this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.asset.id as unknown);
     if (transferProcess) {
       return TransferProcessStates[transferProcess.state];
     }

@@ -11,10 +11,10 @@ import {StorageType} from "../../models/storage-type";
 })
 export class AssetEditorDialog implements OnInit {
 
-  id: string = '';
-  version: string = '';
-  name: string = '';
-  contenttype: string = '';
+  id: unknown = '';
+  version: unknown = '';
+  name: unknown = '';
+  contenttype: unknown = '';
 
   storageTypeId: string = 'AzureStorage';
   account: string = '';
@@ -32,10 +32,10 @@ export class AssetEditorDialog implements OnInit {
     const assetEntryDto: AssetEntryDto = {
       asset: {
         properties: {
-          "asset:prop:name": this.name,
-          "asset:prop:version": this.version,
-          "asset:prop:id": this.id,
-          "asset:prop:contenttype": this.contenttype,
+          "asset:prop:name": this.name as object,
+          "asset:prop:version": this.version as object,
+          "asset:prop:id": this.id as object,
+          "asset:prop:contenttype": this.contenttype as object,
         }
       },
       dataAddress: {

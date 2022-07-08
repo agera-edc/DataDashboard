@@ -1,9 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {
+  AssetDto,
   AssetService,
   ContractAgreementDto,
   ContractAgreementService,
-  TransferId,
+  TransferId, TransferProcessDto,
   TransferProcessService,
   TransferRequestDto
 } from "../../../edc-dmgmt-client";
@@ -67,23 +68,29 @@ export class ContractViewerComponent implements OnInit {
   }
 
   getAsset(assetId?: string): Observable<Asset> {
-    return assetId ? this.assetService.getAsset(assetId).pipe(map(a => new Asset(a.properties))) : of();
+    return assetId ? this.assetService.getAsset(assetId).pipe(map((a: AssetDto) => {
+      let props: { [key: string]: string; } = {};
+      for (const name in a.properties) {
+        props[name] = String(a.properties[name])
+      }
+      return new Asset(props);
+    })) : of();
   }
 
   onTransferClicked(contract: ContractAgreementDto) {
     const dialogRef = this.dialog.open(CatalogBrowserTransferDialog);
 
-    dialogRef.afterClosed().pipe(first()).subscribe(result => {
+    dialogRef.afterClosed().pipe(first()).subscribe((result: { storageTypeId: string; }) => {
       const storageTypeId: string = result.storageTypeId;
       if (storageTypeId !== 'AzureStorage') {
         this.notificationService.showError("Only storage type \"AzureStorage\" is implemented currently!")
         return;
       }
       this.createTransferRequest(contract, storageTypeId)
-        .pipe(switchMap(trq => this.transferService.initiateTransfer(trq)))
-        .subscribe(transferId => {
+        .pipe(switchMap((trq: TransferRequestDto | undefined) => this.transferService.initiateTransfer(trq)))
+        .subscribe((transferId: TransferId) => {
           this.startPolling(transferId, contract.id!);
-        }, error => {
+        }, (error: any) => {
           console.error(error);
           this.notificationService.showError("Error initiating transfer");
         });
@@ -95,7 +102,7 @@ export class ContractViewerComponent implements OnInit {
   }
 
   private createTransferRequest(contract: ContractAgreementDto, storageTypeId: string): Observable<TransferRequestDto> {
-    return this.getOfferedAssetForId(contract.assetId!).pipe(map(offeredAsset => {
+    return this.getOfferedAssetForId(contract.assetId!).pipe(map((offeredAsset: { id: any; originator: any; }) => {
       return {
         assetId: offeredAsset.id,
         contractId: contract.id,
@@ -109,7 +116,8 @@ export class ContractViewerComponent implements OnInit {
         },
         managedResources: true,
         transferType: {isFinite: true}, //must be there, otherwise NPE on backend
-        connectorAddress: offeredAsset.originator
+        connectorAddress: offeredAsset.originator,
+        protocol: 'ids-multipart'
       };
     }));
 
@@ -124,8 +132,8 @@ export class ContractViewerComponent implements OnInit {
   private getOfferedAssetForId(assetId: string): Observable<Asset> {
     return this.catalogService.getContractOffers()
       .pipe(
-        map(offers => offers.find(o => `urn:artifact:${o.asset.id}` === assetId)),
-        map(o => {
+        map((offers: any[]) => offers.find(o => `urn:artifact:${o.asset.id}` === assetId)),
+        map((o: { asset: any; }) => {
           if (o) return o.asset;
           else throw new Error(`No offer found for asset ID ${assetId}`);
         }))
@@ -148,9 +156,9 @@ export class ContractViewerComponent implements OnInit {
   private pollRunningTransfers() {
     return () => {
       from(this.runningTransfers) //create from array
-        .pipe(switchMap(t => this.catalogService.getTransferProcessesById(t.processId)), // fetch from API
-          filter(tpDto => ContractViewerComponent.isFinishedState(tpDto.state)), // only use finished ones
-          tap(tpDto => {
+        .pipe(switchMap((t: { processId: string; }) => this.catalogService.getTransferProcessesById(t.processId)), // fetch from API
+          filter((tpDto: TransferProcessDto) => ContractViewerComponent.isFinishedState(tpDto.state as string)), // only use finished ones
+          tap((tpDto: TransferProcessDto) => {
             // remove from in-progress
             this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== tpDto.id)
             this.notificationService.showInfo(`Transfer [${tpDto.id}] complete!`, "Show me!", () => {
@@ -163,7 +171,7 @@ export class ContractViewerComponent implements OnInit {
           clearInterval(this.pollingHandleTransfer);
           this.pollingHandleTransfer = undefined;
         }
-      }, error => this.notificationService.showError(error))
+      }, (error: string) => this.notificationService.showError(error))
     }
 
   }
