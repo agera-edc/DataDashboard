@@ -82,6 +82,6 @@ export class Asset {
     }
 
     public get isAsync() {
-        return this.type !== 'http' as unknown
+        return this.type !== 'http'
     }
 }
