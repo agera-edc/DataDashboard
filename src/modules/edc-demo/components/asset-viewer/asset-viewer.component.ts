@@ -58,7 +58,7 @@ export class AssetViewerComponent implements OnInit {
     ref.afterClosed().subscribe(res => {
       if (res) {
         this.assetService.removeAsset(asset.id).subscribe(() => this.fetch$.next(null),
-          (err) => this.showError(err),
+          err => this.showError(err),
           () => this.notificationService.showInfo("Successfully deleted")
         );
       }

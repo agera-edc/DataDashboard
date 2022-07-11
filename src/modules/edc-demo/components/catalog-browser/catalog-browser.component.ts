@@ -105,7 +105,7 @@ export class CatalogBrowserComponent implements OnInit {
           }
         }, 1000);
       }
-    }, (error) => {
+    }, error => {
       console.error(error);
       this.notificationService.showError("Error starting negotiation");
     });

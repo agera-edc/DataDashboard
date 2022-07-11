@@ -71,7 +71,7 @@ export class PolicyViewComponent implements OnInit {
 
     const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '20%', data: dialogData});
 
-    ref.afterClosed().subscribe((res: any) => {
+    ref.afterClosed().subscribe(res => {
       if (res) {
         this.policyService.deletePolicy(policy.uid).subscribe(this.errorOrUpdateSubscriber);
       }
