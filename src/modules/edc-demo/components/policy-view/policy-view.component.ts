@@ -50,7 +50,7 @@ export class PolicyViewComponent implements OnInit {
 
   onCreate() {
     const dialogRef = this.dialog.open(NewPolicyDialogComponent)
-    dialogRef.afterClosed().pipe(first()).subscribe((result: { policy?: Policy }) => {
+    dialogRef.afterClosed().pipe(first()).subscribe((result: PolicyDefinition) => {
       if (result) {
         this.policyService.createPolicy(result).subscribe(this.errorOrUpdateSubscriber);
       }
@@ -67,13 +67,13 @@ export class PolicyViewComponent implements OnInit {
 
   delete(policy: PolicyDefinition) {
 
-    const dialogData = ConfirmDialogModel.forDelete("policy", policy.uid as string);
+    const dialogData = ConfirmDialogModel.forDelete("policy", policy.uid);
 
     const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '20%', data: dialogData});
 
     ref.afterClosed().subscribe((res: any) => {
       if (res) {
-        this.policyService.deletePolicy(policy.uid as string).subscribe(this.errorOrUpdateSubscriber);
+        this.policyService.deletePolicy(policy.uid).subscribe(this.errorOrUpdateSubscriber);
       }
     });
   }

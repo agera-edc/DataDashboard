@@ -68,13 +68,7 @@ export class ContractViewerComponent implements OnInit {
   }
 
   getAsset(assetId?: string): Observable<Asset> {
-    return assetId ? this.assetService.getAsset(assetId).pipe(map((a: AssetDto) => {
-      let props: { [key: string]: string; } = {};
-      for (const name in a.properties) {
-        props[name] = String(a.properties[name])
-      }
-      return new Asset(props);
-    })) : of();
+    return assetId ? this.assetService.getAsset(assetId).pipe(map((a: { properties: { [key: string]: string; }; }) => new Asset(a.properties))) : of();
   }
 
   onTransferClicked(contract: ContractAgreementDto) {
@@ -87,7 +81,7 @@ export class ContractViewerComponent implements OnInit {
         return;
       }
       this.createTransferRequest(contract, storageTypeId)
-        .pipe(switchMap((trq: TransferRequestDto | undefined) => this.transferService.initiateTransfer(trq)))
+        .pipe(switchMap((trq: TransferRequestDto) => this.transferService.initiateTransfer(trq)))
         .subscribe((transferId: TransferId) => {
           this.startPolling(transferId, contract.id!);
         }, (error: any) => {

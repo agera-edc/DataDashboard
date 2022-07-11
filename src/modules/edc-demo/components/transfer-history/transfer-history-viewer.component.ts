@@ -36,7 +36,7 @@ export class TransferHistoryViewerComponent implements OnInit {
 
     ref.afterClosed().subscribe((res: any) => {
       if (res) {
-        this.transferProcessService.deprovisionTransferProcess(transferProcess.id as string).subscribe(() => this.loadTransferProcesses());
+        this.transferProcessService.deprovisionTransferProcess(transferProcess.id).subscribe(() => this.loadTransferProcesses());
       }
     });
   }
