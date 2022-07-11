@@ -7,10 +7,11 @@ import {ContractOffer} from '../models/contract-offer';
 import {
   API_KEY,
   CONNECTOR_CATALOG_API,
-  ContractAgreementDto,
   ContractNegotiationDto,
-  ContractNegotiationService, NegotiationId,
-  NegotiationInitiateRequestDto, TransferId,
+  ContractNegotiationService,
+  NegotiationId,
+  NegotiationInitiateRequestDto,
+  TransferId,
   TransferProcessDto,
   TransferProcessService,
   TransferRequestDto
