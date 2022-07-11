@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {AssetService, ContractDefinitionDto, Policy, PolicyDefinition, PolicyService} from "../../../edc-dmgmt-client";
+import {AssetService, ContractDefinitionDto, PolicyDefinition, PolicyService} from "../../../edc-dmgmt-client";
 import {map} from "rxjs/operators";
 import {Asset} from "../../models/asset";
 
@@ -42,11 +42,11 @@ export class ContractDefinitionEditorDialog implements OnInit {
       this.accessPolicy = this.policies.find(policy => policy.uid === this.contractDefinition.accessPolicyId);
       this.contractPolicy = this.policies.find(policy => policy.uid === this.contractDefinition.contractPolicyId);
     });
-    this.assetService.getAllAssets().pipe(map((asset: any[]) => asset.map(a => new Asset(a.properties)))).subscribe((assets: Asset[]) => {
+    this.assetService.getAllAssets().pipe(map((asset) => asset.map(a => new Asset(a.properties)))).subscribe((assets) => {
       this.availableAssets = assets;
       // preselection
       if (this.contractDefinition) {
-        const assetIds = this.contractDefinition.criteria.map(c => c.right as unknown);
+        const assetIds = this.contractDefinition.criteria.map(c => c.right);
         this.assets = this.availableAssets.filter(asset => assetIds.includes(asset.id));
       }
     })
@@ -58,10 +58,10 @@ export class ContractDefinitionEditorDialog implements OnInit {
     this.contractDefinition.criteria = [];
 
     const ids= this.assets.map(asset => asset.id);
-    const assetPropId: unknown = 'asset:prop:id';
+    const assetPropId = 'asset:prop:id';
 
       this.contractDefinition.criteria = [...this.contractDefinition.criteria, {
-        left: assetPropId as object,
+        left: assetPropId,
         op: 'in',
         right: ids,
       }];
