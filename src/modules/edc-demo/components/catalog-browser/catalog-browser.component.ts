@@ -85,8 +85,8 @@ export class CatalogBrowserComponent implements OnInit {
           // const finishedNegotiations: NegotiationResult[] = [];
 
           for (const negotiation of this.runningNegotiations.values()) {
-            this.apiService.getNegotiationState(negotiation.id).subscribe((updatedNegotiation: ContractNegotiationDto) => {
-              if (finishedNegotiationStates.includes(updatedNegotiation.state as string)) {
+            this.apiService.getNegotiationState(negotiation.id).subscribe(updatedNegotiation => {
+              if (finishedNegotiationStates.includes(updatedNegotiation.state)) {
                 let offerId = negotiation.offerId;
                 this.runningNegotiations.delete(offerId);
                 if (updatedNegotiation.state === "CONFIRMED") {

@@ -24,8 +24,8 @@ export class PolicyViewComponent implements OnInit {
               private readonly dialog: MatDialog) {
 
     this.errorOrUpdateSubscriber = {
-      next: (x: any) => this.fetch$.next(null),
-      error: (err: Error) => this.showError(err),
+      next: x => this.fetch$.next(null),
+      error: err => this.showError(err),
       complete: () => {
         this.notificationService.showInfo("Successfully completed")
       },
@@ -38,7 +38,7 @@ export class PolicyViewComponent implements OnInit {
       switchMap(() => {
         const contractDefinitions$ = this.policyService.getAllPolicies();
         return !!this.searchText ?
-          contractDefinitions$.pipe(map((policies: any[]) => policies.filter(policy => this.isFiltered(policy, this.searchText))))
+          contractDefinitions$.pipe(map(policies => policies.filter(policy => this.isFiltered(policy, this.searchText))))
           :
           contractDefinitions$;
       }));

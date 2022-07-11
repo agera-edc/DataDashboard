@@ -74,17 +74,17 @@ export class ContractViewerComponent implements OnInit {
   onTransferClicked(contract: ContractAgreementDto) {
     const dialogRef = this.dialog.open(CatalogBrowserTransferDialog);
 
-    dialogRef.afterClosed().pipe(first()).subscribe((result: { storageTypeId: string; }) => {
+    dialogRef.afterClosed().pipe(first()).subscribe(result => {
       const storageTypeId: string = result.storageTypeId;
       if (storageTypeId !== 'AzureStorage') {
         this.notificationService.showError("Only storage type \"AzureStorage\" is implemented currently!")
         return;
       }
       this.createTransferRequest(contract, storageTypeId)
-        .pipe(switchMap((trq: TransferRequestDto) => this.transferService.initiateTransfer(trq)))
+        .pipe(switchMap(trq => this.transferService.initiateTransfer(trq)))
         .subscribe((transferId: TransferId) => {
           this.startPolling(transferId, contract.id!);
-        }, (error: any) => {
+        }, error => {
           console.error(error);
           this.notificationService.showError("Error initiating transfer");
         });
@@ -96,7 +96,7 @@ export class ContractViewerComponent implements OnInit {
   }
 
   private createTransferRequest(contract: ContractAgreementDto, storageTypeId: string): Observable<TransferRequestDto> {
-    return this.getOfferedAssetForId(contract.assetId!).pipe(map((offeredAsset: { id: any; originator: any; }) => {
+    return this.getOfferedAssetForId(contract.assetId!).pipe(map(offeredAsset => {
       return {
         assetId: offeredAsset.id,
         contractId: contract.id,
@@ -126,8 +126,8 @@ export class ContractViewerComponent implements OnInit {
   private getOfferedAssetForId(assetId: string): Observable<Asset> {
     return this.catalogService.getContractOffers()
       .pipe(
-        map((offers: any[]) => offers.find(o => `urn:artifact:${o.asset.id}` === assetId)),
-        map((o: { asset: any; }) => {
+        map(offers => offers.find(o => `urn:artifact:${o.asset.id}` === assetId)),
+        map(o => {
           if (o) return o.asset;
           else throw new Error(`No offer found for asset ID ${assetId}`);
         }))
@@ -150,9 +150,9 @@ export class ContractViewerComponent implements OnInit {
   private pollRunningTransfers() {
     return () => {
       from(this.runningTransfers) //create from array
-        .pipe(switchMap((t: { processId: string; }) => this.catalogService.getTransferProcessesById(t.processId)), // fetch from API
-          filter((tpDto: TransferProcessDto) => ContractViewerComponent.isFinishedState(tpDto.state)), // only use finished ones
-          tap((tpDto: TransferProcessDto) => {
+        .pipe(switchMap(t => this.catalogService.getTransferProcessesById(t.processId)), // fetch from API
+          filter(tpDto => ContractViewerComponent.isFinishedState(tpDto.state)), // only use finished ones
+          tap(tpDto => {
             // remove from in-progress
             this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== tpDto.id)
             this.notificationService.showInfo(`Transfer [${tpDto.id}] complete!`, "Show me!", () => {
@@ -165,7 +165,7 @@ export class ContractViewerComponent implements OnInit {
           clearInterval(this.pollingHandleTransfer);
           this.pollingHandleTransfer = undefined;
         }
-      }, (error: string) => this.notificationService.showError(error))
+      }, error => this.notificationService.showError(error))
     }
 
   }

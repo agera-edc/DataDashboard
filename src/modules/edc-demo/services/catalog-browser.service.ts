@@ -35,7 +35,7 @@ export class CatalogBrowserService {
 
   getContractOffers(): Observable<ContractOffer[]> {
     return this.post<ContractOffer[]>(this.catalogApiUrl)
-      .pipe(map((contractOffers: any[]) => contractOffers.map(contractOffer => {
+      .pipe(map(contractOffers => contractOffers.map(contractOffer => {
         contractOffer.asset = new Asset(contractOffer.asset.properties)
         return contractOffer;
       })));

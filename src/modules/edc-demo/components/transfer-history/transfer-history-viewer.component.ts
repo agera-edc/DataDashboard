@@ -34,7 +34,7 @@ export class TransferHistoryViewerComponent implements OnInit {
     dialogData.cancelText = "Abort";
     const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '20%', data: dialogData});
 
-    ref.afterClosed().subscribe((res) => {
+    ref.afterClosed().subscribe(res => {
       if (res) {
         this.transferProcessService.deprovisionTransferProcess(transferProcess.id).subscribe(() => this.loadTransferProcesses());
       }
