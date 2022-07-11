@@ -105,7 +105,7 @@ export class CatalogBrowserComponent implements OnInit {
           }
         }, 1000);
       }
-    }, (error: any) => {
+    }, (error) => {
       console.error(error);
       this.notificationService.showError("Error starting negotiation");
     });
@@ -116,7 +116,7 @@ export class CatalogBrowserComponent implements OnInit {
   }
 
   getState(contractOffer: ContractOffer): string {
-    const transferProcess = this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.asset.id as unknown);
+    const transferProcess = this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.asset.id);
     if (transferProcess) {
       return TransferProcessStates[transferProcess.state];
     }
