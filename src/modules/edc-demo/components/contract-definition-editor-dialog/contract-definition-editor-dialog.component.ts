@@ -42,7 +42,7 @@ export class ContractDefinitionEditorDialog implements OnInit {
       this.accessPolicy = this.policies.find(policy => policy.uid === this.contractDefinition.accessPolicyId);
       this.contractPolicy = this.policies.find(policy => policy.uid === this.contractDefinition.contractPolicyId);
     });
-    this.assetService.getAllAssets().pipe(map((asset) => asset.map(a => new Asset(a.properties)))).subscribe((assets) => {
+    this.assetService.getAllAssets().pipe(map((asset) => asset.map(a => new Asset(a.properties)))).subscribe(assets => {
       this.availableAssets = assets;
       // preselection
       if (this.contractDefinition) {
@@ -53,11 +53,11 @@ export class ContractDefinitionEditorDialog implements OnInit {
   }
 
   onSave() {
-    this.contractDefinition.accessPolicyId = this.accessPolicy!.uid as string;
-    this.contractDefinition.contractPolicyId = this.contractPolicy!.uid as string;
+    this.contractDefinition.accessPolicyId = this.accessPolicy!.uid;
+    this.contractDefinition.contractPolicyId = this.contractPolicy!.uid;
     this.contractDefinition.criteria = [];
 
-    const ids= this.assets.map(asset => asset.id);
+    const ids = this.assets.map(asset => asset.id);
     this.contractDefinition.criteria = [...this.contractDefinition.criteria, {
         left: 'asset:prop:id',
         op: 'in',

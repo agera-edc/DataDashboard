@@ -151,7 +151,7 @@ export class ContractViewerComponent implements OnInit {
     return () => {
       from(this.runningTransfers) //create from array
         .pipe(switchMap((t: { processId: string; }) => this.catalogService.getTransferProcessesById(t.processId)), // fetch from API
-          filter((tpDto: TransferProcessDto) => ContractViewerComponent.isFinishedState(tpDto.state as string)), // only use finished ones
+          filter((tpDto: TransferProcessDto) => ContractViewerComponent.isFinishedState(tpDto.state)), // only use finished ones
           tap((tpDto: TransferProcessDto) => {
             // remove from in-progress
             this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== tpDto.id)

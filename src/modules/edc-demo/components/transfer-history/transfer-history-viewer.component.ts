@@ -34,7 +34,7 @@ export class TransferHistoryViewerComponent implements OnInit {
     dialogData.cancelText = "Abort";
     const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '20%', data: dialogData});
 
-    ref.afterClosed().subscribe((res: any) => {
+    ref.afterClosed().subscribe((res) => {
       if (res) {
         this.transferProcessService.deprovisionTransferProcess(transferProcess.id).subscribe(() => this.loadTransferProcesses());
       }
@@ -46,7 +46,7 @@ export class TransferHistoryViewerComponent implements OnInit {
   }
 
   showDeprovisionButton(transferProcess: TransferProcessDto) {
-    return ['COMPLETED', 'PROVISIONED', 'REQUESTED', 'REQUESTED_ACK', 'IN_PROGRESS', 'STREAMING'].includes(transferProcess.state as string);
+    return ['COMPLETED', 'PROVISIONED', 'REQUESTED', 'REQUESTED_ACK', 'IN_PROGRESS', 'STREAMING'].includes(transferProcess.state);
   }
 
   loadTransferProcesses() {
