@@ -132,6 +132,8 @@ export class ContractAgreementService {
             const httpHeaderAccepts: string[] = [
                 'application/json'
             ];
+                'application/json'
+            ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -188,6 +190,8 @@ export class ContractAgreementService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
                 'application/json'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
