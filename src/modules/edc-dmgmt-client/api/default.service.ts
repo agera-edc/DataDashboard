@@ -107,8 +107,6 @@ export class DefaultService {
             const httpHeaderAccepts: string[] = [
                 'application/json'
             ];
-                'application/json'
-            ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
         if (localVarHttpHeaderAcceptSelected !== undefined) {
