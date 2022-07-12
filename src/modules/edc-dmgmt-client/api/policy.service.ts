@@ -110,7 +110,6 @@ export class PolicyService {
             const httpHeaderAccepts: string[] = [
                 'application/json'
             ];
-            ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -177,7 +176,6 @@ export class PolicyService {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
                 'application/json'
-            ];
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }

@@ -115,7 +115,6 @@ export class TransferProcessService {
             const httpHeaderAccepts: string[] = [
                 'application/json'
             ];
-            ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
         if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -173,7 +172,6 @@ export class TransferProcessService {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
                 'application/json'
-            ];
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }

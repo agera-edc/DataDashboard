@@ -110,7 +110,6 @@ export class TokenValidationService {
             const httpHeaderAccepts: string[] = [
                 'application/json'
             ];
-            ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
         if (localVarHttpHeaderAcceptSelected !== undefined) {
